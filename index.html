@@ -3,202 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mohamed Awaiz & Bibi Ayesha (Rifah) - Wedding Invitation</title>
-    
-    <!-- Google Fonts: Luxury Serif & Calligraphy -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
-    
-    <!-- GSAP Animation Library -->
+    <title>Mohamed Awaiz & Bibi Ayesha - Wedding Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
     <style>
-        :root {
-            --bg-color: #f7f5f0;
-            --card-bg: #ffffff;
-            --text-primary: #2c2a29;
-            --text-muted: #6b6764;
-            --accent-gold: #c5a059;
-            --accent-lavender: #d6d4e0;
-            --border-color: #e3dec9;
-        }
+        :root { --bg: #f7f5f0; --card: #ffffff; --text: #2c2a29; --muted: #6b6764; --gold: #c5a059; --border: #e3dec9; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', serif; height: 100dvh; overflow: hidden; }
+        #envelope-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; background: #f0ede6; display: flex; align-items: center; justify-content: center; z-index: 100; transition: opacity 0.6s ease; }
+        .envelope-card { width: 90%; max-width: 400px; height: 560px; background: #fff; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.06); }
+        .envelope-flap { position: absolute; top: 0; left: 0; width: 100%; height: 50%; background: #eae5dc; clip-path: polygon(0 0, 50% 100%, 100% 0); transform-origin: top; transition: transform 0.8s cubic-bezier(0.77,0,0.175,1); z-index: 3; }
+        .wax-seal { width: 72px; height: 72px; background: radial-gradient(circle, #e2dff0, #b8b3d1); border: 2px solid #9b95be; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 4; cursor: pointer; font-family: 'Pinyon Script', cursive; font-size: 24px; color: #3b3554; box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+        .envelope-prompt { position: absolute; bottom: 50px; font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); z-index: 4; }
+        #main-content { opacity: 0; visibility: hidden; height: 100dvh; overflow-y: auto; scroll-snap-type: y mandatory; }
+        .invitation-section { width: 100%; height: 100dvh; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .card-frame { width: 100%; max-width: 420px; height: 85vh; background: var(--card); border: 1px solid var(--border); padding: 35px 24px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .bismillah { font-size: 14px; font-style: italic; color: var(--muted); }
+        .section-tag { font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); }
+        .script-title { font-family: 'Pinyon Script', cursive; font-size: 42px; color: var(--text); }
+        .names-large { font-family: 'Pinyon Script', cursive; font-size: 38px; color: var(--text); line-height: 1.1; }
+        .event-details { font-size: 16px; line-height: 1.5; }
+        .event-details strong { display: block; font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 2px; }
+        .btn-gold { display: inline-block; background: transparent; color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 20px; border: 1px solid var(--text); text-decoration: none; }
+        .scroll-hint { font-family: 'Montserrat', sans-serif; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    </style>
+</head>
+<body>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+    <div id="envelope-screen">
+        <div class="envelope-card">
+            <div class="envelope-flap" id="envelopeFlap"></div>
+            <div class="wax-seal" id="openSeal">A&R</div>
+            <div class="envelope-prompt">Tap Seal to Open</div>
+        </div>
+    </div>
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Cormorant Garamond', serif;
-            overflow-x: hidden;
-            position: relative;
-            height: 100vh;
-            height: 100dvh;
-        }
+    <div id="main-content">
+        <section class="invitation-section">
+            <div class="card-frame">
+                <div class="bismillah">In the name of Allah, the most Beneficent, the most Merciful</div>
+                <div>
+                    <div class="section-tag">With the Grace of Allah</div>
+                    <div class="names-large" style="margin-top: 10px;">Mohamed Awaiz</div>
+                    <div style="font-style: italic; margin: 4px 0; color: var(--muted);">with</div>
+                    <div class="names-large">Bibi Ayesha (Rifah)</div>
+                </div>
+                <div style="font-size: 15px; color: var(--muted);">Request the pleasure of your presence with family<br>to bless the couple on the occasion of<br><strong style="color: var(--text);">Nikah & Valima</strong></div>
+                <div class="scroll-hint">Scroll Down ↓</div>
+            </div>
+        </section>
 
-        /* Subtle Paper Texture Overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
-            background-size: 24px 24px;
-            pointer-events: none;
-            z-index: 999;
-        }
+        <section class="invitation-section">
+            <div class="card-frame" style="justify-content: center; gap: 15px;">
+                <div class="section-tag">Divine Guidance</div>
+                <div style="font-size: 15px; font-style: italic; line-height: 1.6;">"And one of His signs is that He created for you spouses from among yourselves so that you may find comfort in them. And He has placed between you compassion and mercy."</div>
+                <div class="bismillah">(Quran 30:21)</div>
+                <div class="scroll-hint" style="margin-top: 20px;">Scroll Down ↓</div>
+            </div>
+        </section>
 
-        /* --- AUDIO TOGGLE --- */
-        .audio-control {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-        .audio-control.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .audio-control svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--text-primary);
-        }
+        <section class="invitation-section">
+            <div class="card-frame">
+                <div class="section-tag">In Sha Allah</div>
+                <div class="script-title">Nikah</div>
+                <div class="event-details">
+                    <strong>Date</strong>Thursday, 17th December 2026<br><span style="font-size: 14px; color: var(--muted);">(8 Rajab 1448 Hijri)</span>
+                </div>
+                <div class="event-details">
+                    <strong>Time</strong>After Namaz-e-Asr (3:30 PM)
+                </div>
+                <div class="event-details">
+                    <strong>Venue</strong>Choti Charminar Masjid<br>Shivajinagar, Bangalore - 560001
+                </div>
+                <a href="https://maps.google.com/?q=Choti+Charminar+Masjid+Shivajinagar+Bangalore" target="_blank" class="btn-gold">Open Map</a>
+                <div class="scroll-hint">Scroll Down ↓</div>
+            </div>
+        </section>
 
-        /* --- ENVELOPE OVERLAY SCREEN --- */
-        #envelope-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
-            background: #f0ede6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
+        <section class="invitation-section">
+            <div class="card-frame">
+                <div class="section-tag">Sunnah of Dawat-e-Valima</div>
+                <div class="script-title">Valima</div>
+                <div class="event-details">
+                    <strong>Date</strong>Saturday, 19th December 2026<br><span style="font-size: 14px; color: var(--muted);">(10 Rajab 1448 Hijri)</span>
+                </div>
+                <div class="event-details">
+                    <strong>Dinner</strong>7:30 PM onwards
+                </div>
+                <div class="event-details">
+                    <strong>Venue</strong>Shams Convention Centre<br>67, Haines Road, Shivajinagar, Bangalore
+                </div>
+                <a href="https://maps.google.com/?q=Shams+Convention+Centre+Shivajinagar+Bangalore" target="_blank" class="btn-gold">Open Map</a>
+                <div class="scroll-hint">Scroll Down ↓</div>
+            </div>
+        </section>
 
-        .envelope-card {
-            width: 90%;
-            max-width: 420px;
-            height: 600px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
+        <section class="invitation-section">
+            <div class="card-frame" style="justify-content: center; gap: 20px;">
+                <div class="section-tag">Dua & Blessings</div>
+                <div style="font-size: 16px; font-style: italic; line-height: 1.6;">"May Allah (swt) guide this marriage to the best of understanding, happiness, prosperity & success"</div>
+                <div style="font-family: 'Pinyon Script', cursive; font-size: 32px;">Aameen</div>
+                <a href="#" id="calendarBtn" class="btn-gold">Add to Calendar</a>
+            </div>
+        </section>
+    </div>
 
-        .envelope-flap {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 50%;
-            background: #eae5dc;
-            clip-path: polygon(0 0, 50% 100%, 100% 0);
-            transform-origin: top;
-            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
-            z-index: 3;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
+    <script>
+        document.getElementById('openSeal').addEventListener('click', () => {
+            gsap.to('#openSeal', { scale: 1.2, opacity: 0, duration: 0.3 });
+            gsap.to('#envelopeFlap', { rotateX: 180, duration: 0.7, onComplete: () => {
+                document.getElementById('envelope-screen').style.display = 'none';
+                document.getElementById('main-content').style.opacity = 1;
+                document.getElementById('main-content').style.visibility = 'visible';
+            }});
+        });
 
-        .wax-seal {
-            width: 76px;
-            height: 76px;
-            background: radial-gradient(circle at 30% 30%, #e2dff0, #b8b3d1);
-            border: 2px solid #9b95be;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.6);
-            z-index: 4;
-            cursor: pointer;
-            font-family: 'Pinyon Script', cursive;
-            font-size: 26px;
-            color: #3b3554;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: pulse-seal 2s infinite ease-in-out;
-        }
-
-        .wax-seal:hover {
-            transform: scale(1.08);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-        }
-
-        @keyframes pulse-seal {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-        }
-
-        .envelope-prompt {
-            position: absolute;
-            bottom: 60px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 11px;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            z-index: 4;
-        }
-
-        /* --- MAIN INVITATION CONTAINER --- */
-        #main-content {
-            opacity: 0;
-            visibility: hidden;
-            overflow-y: auto;
-            height: 100vh;
-            height: 100dvh;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-        }
-
-        .invitation-section {
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 24px;
-            text-align: center;
-            position: relative;
-            background-color: var(--bg-color);
-        }
-
-        /* Decorative Gold/Silver Borders */
-        .card-frame {
-            width: 100%;
-            max-width: 440px;
-            height: 88%;
-            max-height: 720px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 40px 28px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 
+        document.getElementById('calendarBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Nikah - Mohamed Awaiz & Bibi Ayesha\nDTSTART:20261217T100000Z\nDTEND:20261217T130000Z\nLOCATION:Choti Charminar Masjid Bangalore\nEND:VEVENT\nBEGIN:VEVENT\nSUMMARY:Valima - Mohamed Awaiz & Bibi Ayesha\nDTSTART:20261219T140000Z\nDTEND:20261219T180000Z\nLOCATION:Shams Convention Centre Bangalore\nEND:VEVENT\nEND:VCALENDAR`;
+            const blob = new Blob([ics], { type: 'text/calendar' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'wedding.ics';
+            link.click();
+        });
+    </script>
+</body>
+</html>
